@@ -1,0 +1,124 @@
+openapi: 3.0.0
+info:
+  title: Task Management API
+  version: 0.0.1
+  description: An API to manage asynchronous tasks for pattern matching within an input string.
+
+paths:
+  /tasks:
+    post:
+      summary: Creates a new task
+      description: |
+        Creates a new asynchronous task to find the best match of a pattern within an input string. 
+        Returns a unique task ID to track the progress and results of the task.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreateRequest'
+      responses:
+        '201':
+          description: Successfully created a task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCreateResponse'
+        '400':
+          description: Invalid input, such as a pattern length greater than the input length
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    get:
+      summary: Returns a list of tasks
+      description: Retrieves a list of all tasks, including their status and results.
+      parameters:
+        - name: page
+          in: query
+          description: Page number of the results to fetch.
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Number of records per page.
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: A JSON array of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskDetails'
+
+  /tasks/{taskId}:
+    get:
+      summary: Returns the details of the task
+      description: |
+        Retrieves the details of a specific task using the provided task ID.
+        Includes the current status, position of the pattern, and the number of typos.
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          description: The unique ID of the task
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A JSON object representing the details of the task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDetails'
+        '404':
+          description: Task not found
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        description:
+          type: string
+          description: A detailed description of the error that occurred.
+
+    TaskCreateRequest:
+      type: object
+      properties:
+        pattern:
+          type: string
+          description: The pattern to find within the input string.
+        input:
+          type: string
+          description: The input string where the pattern will be searched.
+
+    TaskCreateResponse:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+          description: The unique ID assigned to the created task.
+
+    TaskDetails:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: The progress status of the task in percentage.
+        position:
+          type: integer
+          description: The position of the pattern in the input with the least number of different characters.
+        typos:
+          type: integer
+          description: The number of typos (mismatched characters) found in the best match.
