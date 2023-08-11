@@ -81,7 +81,7 @@ public class TaskRepositoryTest {
 
         Task task2 = new Task("C", "D");
         underTest.addTask(task2);
-        Pageable pageable = PageRequest.of(0, 1); // Page 0 with size 1
+        Pageable pageable = PageRequest.of(0, 1);
 
         // When
         List<Task> tasks = underTest.findTasks(pageable);
@@ -114,7 +114,7 @@ public class TaskRepositoryTest {
         Task task2 = new Task("C", "D");
         UUID taskId2 = underTest.addTask(task2);
 
-        Pageable pageable = PageRequest.of(0, 2); // Page 0 with size 2
+        Pageable pageable = PageRequest.of(0, 2);
 
         // When
         List<Task> tasks = underTest.findTasks(pageable);
