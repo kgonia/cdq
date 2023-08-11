@@ -51,8 +51,8 @@ Detailed Swagger API documentation is available under [http://localhost:8080/swa
 
 **Request**:
 
-```json
 POST /tasks
+```json
 {
   "pattern": "abc",
   "input": "abcdabc"
