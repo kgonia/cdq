@@ -19,21 +19,14 @@ class ValidationTest {
                 .input("ABCDEF")
                 .pattern("ABC");
 
-        // When & Then
-        assertDoesNotThrow(() -> validation.validateTaskCreateRequest(validRequest));
-    }
-
-    @Test
-    void Should_ThrowException_When_PatternLengthIsGreaterThanInputLength() {
-        // Given
-        TaskCreateRequest invalidRequest = new TaskCreateRequest()
+        // 
+        
+        TaskCreateRequest validRequest = new TaskCreateRequest()
                 .pattern("ABCDEF")
                 .input("ABC");
 
         // When & Then
-        assertThatThrownBy(() -> validation.validateTaskCreateRequest(invalidRequest))
-                .isInstanceOf(ResponseStatusException.class)
-                .hasFieldOrPropertyWithValue("status", HttpStatus.BAD_REQUEST)
-                .hasMessageContaining(Validation.PATTERN_LONGER_THAN_INPUT_ERROR_MESSAGE);
+        assertThatThrownBy(() -> validation.validateTaskCreateRequest(validRequest))
+            MESSAGE);
     }
 }
